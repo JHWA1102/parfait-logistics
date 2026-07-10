@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import DashboardView from "@/views/dashboard/DashboardView.vue";
 import InventoryListView from "@/views/inventory/InventoryListView.vue";
 import CustomerListView from "@/views/customer/CustomerListView.vue";
+import WarehouseListView from "@/views/warehouse/WarehouseListView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -27,6 +28,11 @@ const router = createRouter({
           path: "customer",
           name: "customer",
           component: CustomerListView,
+        },
+        {
+          path: "warehouse",
+          name: "warehouse",
+          component: WarehouseListView,
         },
       ],
     },

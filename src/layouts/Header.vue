@@ -2,39 +2,26 @@
   <header class="header">
     <div class="header__left">
       <h1 class="header__title">Dashboard</h1>
-      <p class="header__subtitle">
-        Welcome back! Here's what's happening today.
-      </p>
+      <p class="header__subtitle">Welcome back! Here's what's happening today.</p>
     </div>
 
     <div class="header__right">
       <!-- Search -->
       <div class="header__search">
-        <input
-          type="text"
-          placeholder="Search..."
-        />
+        <input type="text" placeholder="Search..." />
       </div>
 
       <!-- Notification -->
-      <button class="header__icon-btn">
-        🔔
-      </button>
+      <button class="header__icon-btn">🔔</button>
 
       <!-- User -->
       <div class="header__user">
-        <div class="header__avatar">
-          A
-        </div>
+        <div class="header__avatar">A</div>
 
         <div>
-          <div class="header__name">
-            Administrator
-          </div>
+          <div class="header__name">Administrator</div>
 
-          <div class="header__role">
-            Admin
-          </div>
+          <div class="header__role">Admin</div>
         </div>
       </div>
     </div>
@@ -86,8 +73,8 @@
   width: 260px;
   height: 42px;
 
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
 
   padding: 0 14px;
 
@@ -97,7 +84,7 @@
 }
 
 .header__search input:focus {
-  border-color: #2563eb;
+  border-color: var(--color-primary);
 }
 
 .header__icon-btn {
@@ -105,13 +92,13 @@
   height: 42px;
 
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: #f1f5f9;
 
   cursor: pointer;
 
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .header__icon-btn:hover {
@@ -130,7 +117,7 @@
 
   border-radius: 50%;
 
-  background: #2563eb;
+  background: var(--color-primary);
   color: white;
 
   display: flex;

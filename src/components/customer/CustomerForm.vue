@@ -95,7 +95,7 @@ watch(
 .customer-form__label {
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .customer-form__select {
@@ -104,8 +104,8 @@ watch(
 
   padding: 0 14px;
 
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
 
   background: white;
 
@@ -116,7 +116,7 @@ watch(
 
 .customer-form__select:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }
 </style>

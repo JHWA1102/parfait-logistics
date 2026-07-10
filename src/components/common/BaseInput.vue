@@ -1,16 +1,8 @@
 <template>
   <div class="base-input">
-    <label
-      v-if="label"
-      class="base-input__label"
-    >
+    <label v-if="label" class="form-label">
       {{ label }}
-      <span
-        v-if="required"
-        class="base-input__required"
-      >
-        *
-      </span>
+      <span v-if="required" class="form-required"> * </span>
     </label>
 
     <input
@@ -18,14 +10,11 @@
       :type="type"
       :placeholder="placeholder"
       :disabled="disabled"
-      class="base-input__field"
+      class="form-control"
       @input="$emit('update:modelValue', $event.target.value)"
     />
 
-    <p
-      v-if="hint"
-      class="base-input__hint"
-    >
+    <p v-if="hint" class="form-hint">
       {{ hint }}
     </p>
   </div>
@@ -35,27 +24,27 @@
 defineProps({
   modelValue: {
     type: [String, Number],
-    default: '',
+    default: "",
   },
 
   label: {
     type: String,
-    default: '',
+    default: "",
   },
 
   placeholder: {
     type: String,
-    default: '',
+    default: "",
   },
 
   type: {
     type: String,
-    default: 'text',
+    default: "text",
   },
 
   hint: {
     type: String,
-    default: '',
+    default: "",
   },
 
   required: {
@@ -67,9 +56,9 @@ defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-defineEmits(['update:modelValue'])
+defineEmits(["update:modelValue"]);
 </script>
 
 <style scoped>
@@ -77,45 +66,5 @@ defineEmits(['update:modelValue'])
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.base-input__label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #334155;
-}
-
-.base-input__required {
-  color: #ef4444;
-}
-
-.base-input__field {
-  width: 100%;
-  height: 44px;
-
-  padding: 0 14px;
-
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-
-  font-size: 14px;
-
-  transition: .2s;
-}
-
-.base-input__field:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
-}
-
-.base-input__field:disabled {
-  background: #f8fafc;
-  cursor: not-allowed;
-}
-
-.base-input__hint {
-  font-size: 12px;
-  color: #64748b;
 }
 </style>

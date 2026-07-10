@@ -81,7 +81,7 @@ defineEmits(["edit", "delete"]);
 .code {
   font-family: Consolas, monospace;
   font-weight: 600;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .actions {

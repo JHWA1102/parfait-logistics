@@ -4,6 +4,9 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import App from "./App.vue";
 import router from "./router";
+import "@/assets/styles/variables.css";
+import "@/assets/styles/forms.css";
+import "@/assets/styles/scrollbar.css";
 
 const app = createApp(App);
 

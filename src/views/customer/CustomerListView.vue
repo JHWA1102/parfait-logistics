@@ -66,8 +66,6 @@ function openCreate() {
 }
 
 function editCustomer(customer) {
-  console.log("editCustomer", customer);
-
   selectedCustomer.value = { ...customer };
   openCreateModal.value = true;
 }

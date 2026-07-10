@@ -56,7 +56,7 @@ td {
 
   font-size: 14px;
 
-  color: #334155;
+  color: var(--text-primary);
 
   border-bottom: 1px solid #f1f5f9;
 

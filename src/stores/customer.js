@@ -27,9 +27,7 @@ export const useCustomerStore = defineStore(
     }
 
     function updateCustomer(customer) {
-      console.log("updateCustomer", customer);
       const index = customers.value.findIndex((item) => item.id === customer.id);
-      console.log("index =", index);
       if (index !== -1) {
         customers.value[index] = customer;
       }

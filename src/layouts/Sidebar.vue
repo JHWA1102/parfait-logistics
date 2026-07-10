@@ -98,7 +98,7 @@ function isActive(path) {
 
   border-radius: 14px;
 
-  background: #2563eb;
+  background: var(--color-primary);
 
   color: white;
 
@@ -173,11 +173,11 @@ function isActive(path) {
 
 .sidebar__item:hover {
   background: #eef2ff;
-  color: #2563eb;
+  color: var(--color-primary);
 }
 
 .active {
-  background: #2563eb;
+  background: var(--color-primary);
   color: white;
   font-weight: 600;
 }
@@ -209,7 +209,7 @@ function isActive(path) {
 
   border-radius: 50%;
 
-  background: #2563eb;
+  background: var(--color-primary);
 
   color: white;
 

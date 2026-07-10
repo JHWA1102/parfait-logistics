@@ -1,11 +1,27 @@
 <template>
-  <button :type="type" :class="['base-button', `base-button--${variant}`, `base-button--${size}`]">
+  <button
+    :type="type"
+    :disabled="disabled"
+    :class="[
+      'base-button',
+      `base-button--${variant}`,
+      `base-button--${size}`,
+      {
+        'base-button--block': block,
+      },
+    ]"
+  >
     <slot />
   </button>
 </template>
 
 <script setup>
 defineProps({
+  type: {
+    type: String,
+    default: "button",
+  },
+
   variant: {
     type: String,
     default: "primary",
@@ -34,83 +50,90 @@ defineProps({
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
-
-  cursor: pointer;
+  gap: var(--space-2);
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
-  transition: 0.2s;
+  cursor: pointer;
 
-  font-weight: 600;
+  font-weight: var(--font-semibold);
+  font-size: var(--font-sm);
+
+  transition: var(--transition);
+
+  white-space: nowrap;
 }
 
-/* 크기 */
+/* ===== Size ===== */
 
 .base-button--sm {
+  min-width: 60px;
   height: 32px;
-  padding: 0 12px;
-  font-size: 13px;
+  padding: 0 14px;
 }
 
 .base-button--md {
+  min-width: 80px;
   height: 40px;
-  padding: 0 16px;
-  font-size: 14px;
+  padding: 0 18px;
 }
 
 .base-button--lg {
+  min-width: 100px;
   height: 46px;
-  padding: 0 20px;
-  font-size: 15px;
+  padding: 0 22px;
 }
 
-/* 색상 */
+/* ===== Variant ===== */
 
 .base-button--primary {
-  background: #2563eb;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
-.base-button--primary:hover {
-  background: #1d4ed8;
+.base-button--primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
 }
 
 .base-button--secondary {
-  background: #f1f5f9;
-  color: #334155;
+  background: var(--color-gray-100);
+  color: var(--text-primary);
 }
 
-.base-button--secondary:hover {
-  background: #e2e8f0;
+.base-button--secondary:hover:not(:disabled) {
+  background: var(--color-gray-200);
 }
 
 .base-button--success {
-  background: #16a34a;
-  color: white;
-}
-
-.base-button--success:hover {
-  background: #15803d;
+  background: var(--color-success);
+  color: var(--color-white);
 }
 
 .base-button--danger {
-  background: #dc2626;
-  color: white;
+  background: var(--color-danger);
+  color: var(--color-white);
 }
 
-.base-button--danger:hover {
-  background: #b91c1c;
+.base-button--success:hover:not(:disabled) {
+  filter: brightness(0.95);
 }
+
+.base-button--danger:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+/* ===== Block ===== */
 
 .base-button--block {
   width: 100%;
 }
 
+/* ===== Disabled ===== */
+
 .base-button:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 </style>
