@@ -31,11 +31,27 @@ export const useInventoryStore = defineStore(
       },
     ]);
 
+    /* ==========================
+       Dashboard
+    ========================== */
+
     const totalProducts = computed(() => products.value.length);
 
     const lowStockCount = computed(
       () => products.value.filter((product) => product.stock < 20).length,
     );
+
+    /* ==========================
+       재고 상태 갱신
+    ========================== */
+
+    function updateStockStatus(product) {
+      product.status = product.stock < 20 ? "부족" : "정상";
+    }
+
+    /* ==========================
+       등록
+    ========================== */
 
     function addProduct(product) {
       products.value.push({
@@ -44,9 +60,9 @@ export const useInventoryStore = defineStore(
       });
     }
 
-    function removeProduct(id) {
-      products.value = products.value.filter((product) => product.id !== id);
-    }
+    /* ==========================
+       수정
+    ========================== */
 
     function updateProduct(updatedProduct) {
       const index = products.value.findIndex((product) => product.id === updatedProduct.id);
@@ -58,14 +74,72 @@ export const useInventoryStore = defineStore(
       });
     }
 
+    /* ==========================
+       삭제
+    ========================== */
+
+    function removeProduct(id) {
+      products.value = products.value.filter((product) => product.id !== id);
+    }
+
+    /* ==========================
+       재고 증가
+    ========================== */
+
+    function increaseStock(productId, quantity) {
+      const product = findProduct(productId);
+
+      if (!product) return;
+
+      product.stock += Number(quantity);
+
+      updateStockStatus(product);
+    }
+
+    /* ==========================
+       재고 감소
+    ========================== */
+
+    function decreaseStock(productId, quantity) {
+      const product = findProduct(productId);
+
+      if (!product) return false;
+
+      quantity = Number(quantity);
+
+      if (product.stock < quantity) {
+        return false;
+      }
+
+      product.stock -= quantity;
+
+      updateStockStatus(product);
+
+      return true;
+    }
+
+    /* ==========================
+       품목 조회
+    ========================== */
+
+    function findProduct(productId) {
+      return products.value.find((item) => String(item.id) === String(productId)) ?? null;
+    }
+
     return {
       products,
+
       totalProducts,
       lowStockCount,
 
       addProduct,
-      removeProduct,
       updateProduct,
+      removeProduct,
+
+      increaseStock,
+      decreaseStock,
+
+      findProduct,
     };
   },
   {

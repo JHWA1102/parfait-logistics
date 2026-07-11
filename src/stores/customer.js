@@ -15,6 +15,16 @@ export const useCustomerStore = defineStore(
         country: "대한민국",
         type: "공급업체",
       },
+      {
+        id: 2,
+        code: "CUS-0001",
+        company: "쿠팡",
+        manager: "홍길동",
+        phone: "010-2222-3333",
+        email: "hong@coupang.com",
+        country: "대한민국",
+        type: "고객사",
+      },
     ]);
 
     const totalCustomers = computed(() => customers.value.length);

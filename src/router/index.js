@@ -6,6 +6,8 @@ import DashboardView from "@/views/dashboard/DashboardView.vue";
 import InventoryListView from "@/views/inventory/InventoryListView.vue";
 import CustomerListView from "@/views/customer/CustomerListView.vue";
 import WarehouseListView from "@/views/warehouse/WarehouseListView.vue";
+import InboundListView from "@/views/inbound/InboundListView.vue";
+import OutboundListView from "@/views/outbound/OutboundListView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,6 +35,16 @@ const router = createRouter({
           path: "warehouse",
           name: "warehouse",
           component: WarehouseListView,
+        },
+        {
+          path: "/inbound",
+          name: "inbound",
+          component: InboundListView,
+        },
+        {
+          path: "/outbound",
+          name: "outbound",
+          component: OutboundListView,
         },
       ],
     },
