@@ -64,11 +64,42 @@ export const useInboundStore = defineStore(
       inbounds.value = inbounds.value.filter((item) => item.id !== id);
     }
 
+    /* ==========================
+   최근 7일 입고 통계
+========================== */
+
+    const weeklyInboundStats = computed(() => {
+      const labels = [];
+      const data = [];
+
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+
+        date.setDate(date.getDate() - i);
+
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, "0");
+        const dd = String(date.getDate()).padStart(2, "0");
+
+        const dateString = `${yyyy}-${mm}-${dd}`;
+
+        labels.push(`${mm}/${dd}`);
+
+        data.push(inbounds.value.filter((item) => item.date === dateString).length);
+      }
+
+      return {
+        labels,
+        data,
+      };
+    });
+
     return {
       inbounds,
 
       totalInbounds,
       completedInbounds,
+      weeklyInboundStats,
 
       addInbound,
       updateInbound,

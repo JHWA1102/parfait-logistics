@@ -41,6 +41,10 @@ export const useInventoryStore = defineStore(
       () => products.value.filter((product) => product.stock < 20).length,
     );
 
+    const lowStockProducts = computed(() =>
+      products.value.filter((product) => product.stock < 20).sort((a, b) => a.stock - b.stock),
+    );
+
     /* ==========================
        재고 상태 갱신
     ========================== */
@@ -131,6 +135,7 @@ export const useInventoryStore = defineStore(
 
       totalProducts,
       lowStockCount,
+      lowStockProducts,
 
       addProduct,
       updateProduct,
