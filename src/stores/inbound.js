@@ -2,13 +2,16 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
 import { useInventoryStore } from "./inventory";
+import { useInventoryHistoryStore } from "./inventoryHistory";
+import { useInventoryStockStore } from "./inventoryStock";
 import { generateDocumentNo } from "@/utils/numberGenerator";
 
 export const useInboundStore = defineStore(
   "inbound",
   () => {
     const inventoryStore = useInventoryStore();
-
+    const historyStore = useInventoryHistoryStore();
+    const inventoryStockStore = useInventoryStockStore();
     const inbounds = ref([]);
 
     /* ==========================
@@ -39,7 +42,32 @@ export const useInboundStore = defineStore(
       inbounds.value.push(newInbound);
 
       // 재고 증가
-      inventoryStore.increaseStock(newInbound.productId, newInbound.quantity);
+      const stockResult = inventoryStockStore.increaseStock(
+        newInbound.warehouseId,
+        newInbound.productId,
+        newInbound.quantity,
+      );
+
+      // 재고 이력 저장
+      if (stockResult) {
+        historyStore.addHistory({
+          type: "입고",
+
+          documentNo: newInbound.inboundNo,
+
+          productId: newInbound.productId,
+
+          warehouseId: newInbound.warehouseId,
+
+          quantity: Number(newInbound.quantity),
+
+          beforeStock: stockResult.beforeStock,
+
+          afterStock: stockResult.afterStock,
+
+          date: newInbound.date,
+        });
+      }
     }
 
     /* ==========================

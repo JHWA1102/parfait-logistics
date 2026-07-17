@@ -1,100 +1,188 @@
 <template>
   <header class="header">
-    <div class="header__left">
-      <h1 class="header__title">Dashboard</h1>
-      <p class="header__subtitle">Welcome back! Here's what's happening today.</p>
-    </div>
+    <div class="header__left"></div>
 
     <div class="header__right">
-      <!-- Search -->
-      <div class="header__search">
-        <input type="text" placeholder="Search..." />
+      <!-- Notification -->
+      <div class="header__notification">
+        <button class="header__icon-btn" @click.stop="toggleNotification">
+          <Bell :size="20" />
+
+          <span v-if="notificationStore.unreadCount" class="header__badge">
+            {{ notificationStore.unreadCount }}
+          </span>
+        </button>
+
+        <Transition name="dropdown">
+          <div v-if="notificationOpen" class="notification" @click.stop>
+            <div class="notification__title">알림</div>
+
+            <div
+              v-for="item in notificationStore.notifications"
+              :key="item.title"
+              class="notification__item"
+            >
+              <strong>{{ item.title }}</strong>
+
+              <p>{{ item.message }}</p>
+            </div>
+
+            <div v-if="!notificationStore.notifications.length" class="notification__empty">
+              새로운 알림이 없습니다.
+            </div>
+          </div>
+        </Transition>
       </div>
 
-      <!-- Notification -->
-      <button class="header__icon-btn">🔔</button>
-
       <!-- User -->
-      <div class="header__user">
-        <div class="header__avatar">A</div>
+      <div class="header__user-wrapper">
+        <button class="header__user" @click.stop="toggleMenu">
+          <div class="header__avatar">
+            {{ userInitial }}
+          </div>
 
-        <div>
-          <div class="header__name">Administrator</div>
+          <div class="header__info">
+            <div class="header__name">
+              {{ authStore.userName }}
+            </div>
 
-          <div class="header__role">Admin</div>
-        </div>
+            <div class="header__role">
+              {{ roleName }}
+            </div>
+          </div>
+
+          <ChevronDown :size="18" />
+        </button>
+
+        <Transition name="dropdown">
+          <div v-if="menuOpen" class="header__dropdown" @click.stop>
+            <div class="header__dropdown-user">
+              <div class="header__dropdown-name">
+                {{ authStore.userName }}
+              </div>
+
+              <div class="header__dropdown-role">
+                {{ roleName }}
+              </div>
+            </div>
+
+            <div class="header__divider"></div>
+
+            <button class="header__menu-item">👤 내 정보</button>
+
+            <button class="header__menu-item">🔒 비밀번호 변경</button>
+
+            <div class="header__divider"></div>
+
+            <button class="header__menu-item logout" @click="logout">🚪 로그아웃</button>
+          </div>
+        </Transition>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
-// 추후 로그인 정보(Pinia/Firebase) 연결 예정
+import { Bell, ChevronDown } from "lucide-vue-next";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { useNotificationStore } from "@/stores/notification";
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+const menuOpen = ref(false);
+const notificationOpen = ref(false);
+
+const notificationStore = useNotificationStore();
+
+function toggleNotification() {
+  notificationOpen.value = !notificationOpen.value;
+  menuOpen.value = false;
+}
+
+function toggleMenu() {
+  menuOpen.value = !menuOpen.value;
+  notificationOpen.value = false;
+}
+
+const roleName = computed(() => {
+  const map = {
+    ADMIN: "관리자",
+    PURCHASE: "구매담당",
+    SALES: "영업담당",
+    WAREHOUSE: "물류담당",
+  };
+
+  return map[authStore.role] ?? authStore.role;
+});
+
+const userInitial = computed(() =>
+  authStore.userName ? authStore.userName.charAt(0).toUpperCase() : "?",
+);
+
+function logout() {
+  authStore.logout();
+  router.push("/login");
+}
+
+function closeMenu(event) {
+  if (!event.target.closest(".header__user-wrapper")) {
+    menuOpen.value = false;
+  }
+
+  if (!event.target.closest(".header__notification")) {
+    notificationOpen.value = false;
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("click", closeMenu);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("click", closeMenu);
+});
 </script>
 
 <style scoped>
 .header {
-  height: 80px;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
+  height: 72px;
+  padding: 0 28px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 0 32px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .header__left {
-  display: flex;
-  flex-direction: column;
-}
-
-.header__title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-}
-
-.header__subtitle {
-  margin-top: 4px;
-  color: #64748b;
-  font-size: 14px;
+  flex: 1;
 }
 
 .header__right {
   display: flex;
   align-items: center;
-  gap: 20px;
-}
-
-.header__search input {
-  width: 260px;
-  height: 42px;
-
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-
-  padding: 0 14px;
-
-  outline: none;
-
-  font-size: 14px;
-}
-
-.header__search input:focus {
-  border-color: var(--color-primary);
+  gap: 18px;
 }
 
 .header__icon-btn {
+  position: relative;
+
   width: 42px;
   height: 42px;
 
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
 
-  background: #f1f5f9;
+  background: #f8fafc;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   cursor: pointer;
 
@@ -102,13 +190,32 @@
 }
 
 .header__icon-btn:hover {
-  background: #e2e8f0;
+  background: #eef2ff;
+}
+
+.header__user-wrapper {
+  position: relative;
 }
 
 .header__user {
   display: flex;
   align-items: center;
   gap: 12px;
+
+  border: none;
+  background: white;
+
+  padding: 8px 12px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.header__user:hover {
+  background: #f8fafc;
 }
 
 .header__avatar {
@@ -118,22 +225,198 @@
   border-radius: 50%;
 
   background: var(--color-primary);
+
   color: white;
 
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
-  font-weight: bold;
+  font-weight: 700;
+}
+
+.header__info {
+  text-align: left;
 }
 
 .header__name {
+  font-size: 14px;
   font-weight: 600;
-  color: #111827;
 }
 
 .header__role {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.header__arrow {
+  color: #94a3b8;
+}
+
+.header__dropdown {
+  position: absolute;
+
+  top: 58px;
+  right: 0;
+
+  width: 240px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+
+  z-index: 100;
+}
+
+.header__dropdown-user {
+  padding: 18px;
+}
+
+.header__dropdown-name {
+  font-weight: 700;
+}
+
+.header__dropdown-role {
   color: #64748b;
   font-size: 13px;
+  margin-top: 4px;
+}
+
+.header__divider {
+  height: 1px;
+  background: #f1f5f9;
+}
+
+.header__menu-item {
+  width: 100%;
+
+  padding: 14px 18px;
+
+  border: none;
+  background: white;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.header__menu-item:hover {
+  background: #f8fafc;
+}
+
+.logout {
+  color: #dc2626;
+}
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.18s ease;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.header__badge {
+  position: absolute;
+
+  top: -4px;
+  right: -4px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 4px;
+
+  border-radius: 999px;
+
+  background: #ef4444;
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__notification {
+  position: relative;
+}
+
+.notification {
+  position: absolute;
+
+  top: 54px;
+  right: 0;
+
+  width: 340px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+  overflow: hidden;
+
+  z-index: 1000;
+}
+
+.notification__title {
+  padding: 16px;
+
+  font-weight: 700;
+
+  border-bottom: 1px solid #eee;
+}
+
+.notification__item {
+  padding: 16px;
+
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.notification__item strong {
+  display: block;
+
+  margin-bottom: 6px;
+}
+
+.notification__item p {
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.notification__empty {
+  padding: 30px;
+
+  text-align: center;
+
+  color: #94a3b8;
+}
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.18s ease;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 </style>

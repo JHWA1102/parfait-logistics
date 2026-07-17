@@ -15,7 +15,7 @@
 
     <!-- Menu -->
     <nav class="sidebar__menu">
-      <div v-for="group in menus" :key="group.title" class="sidebar__group">
+      <div v-for="group in visibleMenus" :key="group.title" class="sidebar__group">
         <div class="sidebar__group-title">
           {{ group.title }}
         </div>
@@ -38,31 +38,53 @@
 
     <!-- User -->
     <div class="sidebar__footer">
-      <div class="sidebar__avatar">A</div>
+      <div class="sidebar__avatar">
+        {{ authStore.userName.charAt(0) }}
+      </div>
 
       <div>
-        <div class="sidebar__user">Administrator</div>
+        <div class="sidebar__user">
+          {{ authStore.userName }}
+        </div>
 
-        <div class="sidebar__role">Admin</div>
+        <div class="sidebar__role">
+          {{ authStore.role }}
+        </div>
       </div>
     </div>
   </aside>
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
+
 import { Package } from "lucide-vue-next";
 
 import { menus } from "@/constants/menu";
+import { useAuthStore } from "@/stores/auth";
+
+import { useRouter } from "vue-router";
 
 const route = useRoute();
+const authStore = useAuthStore();
+
+const visibleMenus = computed(() => {
+  return menus
+    .map((group) => ({
+      ...group,
+
+      items: group.items.filter((menu) => authStore.hasRole(...menu.roles)),
+    }))
+    .filter((group) => group.items.length > 0);
+});
 
 function isActive(path) {
   if (path === "/") {
     return route.path === "/";
   }
 
-  return route.path.startsWith(path);
+  return route.path === path || route.path.startsWith(path + "/");
 }
 </script>
 

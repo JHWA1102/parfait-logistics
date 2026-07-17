@@ -19,11 +19,12 @@
 
         <td>{{ product.unit }}</td>
 
-        <td>{{ product.stock }}</td>
+        <!-- ⭐ 변경 -->
+        <td>{{ getStock(product.id) }}</td>
 
         <td>
-          <span class="badge" :class="badgeClass(product.stock)">
-            {{ getStatus(product.stock) }}
+          <span class="badge" :class="badgeClass(getStock(product.id))">
+            {{ getStatus(getStock(product.id)) }}
           </span>
         </td>
 
@@ -59,6 +60,10 @@
 import BaseButton from "@/components/common/BaseButton.vue";
 import BaseTable from "@/components/common/BaseTable.vue";
 
+import { useInventoryStockStore } from "@/stores/inventoryStock";
+
+const inventoryStockStore = useInventoryStockStore();
+
 defineProps({
   products: {
     type: Array,
@@ -67,6 +72,10 @@ defineProps({
 });
 
 defineEmits(["edit", "delete"]);
+
+function getStock(productId) {
+  return inventoryStockStore.getTotalStock(productId);
+}
 
 function getStatus(stock) {
   if (stock === 0) return "품절";

@@ -2,12 +2,16 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
 import { useInventoryStore } from "./inventory";
+import { useInventoryStockStore } from "./inventoryStock";
+import { useInventoryHistoryStore } from "./inventoryHistory";
 import { generateDocumentNo } from "@/utils/numberGenerator";
 
 export const useOutboundStore = defineStore(
   "outbound",
   () => {
     const inventoryStore = useInventoryStore();
+    const historyStore = useInventoryHistoryStore();
+    const inventoryStockStore = useInventoryStockStore();
 
     const outbounds = ref([]);
 
@@ -26,9 +30,13 @@ export const useOutboundStore = defineStore(
     ========================== */
 
     function addOutbound(outbound) {
-      const success = inventoryStore.decreaseStock(outbound.productId, outbound.quantity);
+      const stockResult = inventoryStockStore.decreaseStock(
+        outbound.warehouseId,
+        outbound.productId,
+        outbound.quantity,
+      );
 
-      if (!success) {
+      if (!stockResult) {
         return {
           success: false,
           message: "재고가 부족합니다.",
@@ -46,6 +54,24 @@ export const useOutboundStore = defineStore(
       };
 
       outbounds.value.push(newOutbound);
+
+      historyStore.addHistory({
+        type: "출고",
+
+        documentNo: newOutbound.outboundNo,
+
+        productId: newOutbound.productId,
+
+        warehouseId: newOutbound.warehouseId,
+
+        quantity: Number(newOutbound.quantity),
+
+        beforeStock: stockResult.beforeStock,
+
+        afterStock: stockResult.afterStock,
+
+        date: newOutbound.date,
+      });
 
       return {
         success: true,

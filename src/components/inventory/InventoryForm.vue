@@ -10,8 +10,6 @@
     />
 
     <BaseInput v-model="localForm.unit" label="단위" placeholder="EA / BOX" required />
-
-    <BaseInput v-model="localForm.stock" type="number" label="초기 재고" required />
   </div>
 </template>
 
@@ -31,15 +29,19 @@ const emit = defineEmits(["update:modelValue"]);
 
 const localForm = reactive({
   id: null,
+
   code: "",
+
   name: "",
+
   unit: "",
-  stock: 0,
 });
 
 watch(
   () => props.modelValue,
   (value) => {
+    if (!value) return;
+
     Object.assign(localForm, value);
   },
   {

@@ -10,24 +10,18 @@ export const useInventoryStore = defineStore(
         code: "P001",
         name: "박스 A",
         unit: "EA",
-        stock: 120,
-        status: "정상",
       },
       {
         id: 2,
         code: "P002",
         name: "박스 B",
         unit: "BOX",
-        stock: 18,
-        status: "부족",
       },
       {
         id: 3,
         code: "P003",
         name: "테이프",
         unit: "EA",
-        stock: 250,
-        status: "정상",
       },
     ]);
 
@@ -36,22 +30,6 @@ export const useInventoryStore = defineStore(
     ========================== */
 
     const totalProducts = computed(() => products.value.length);
-
-    const lowStockCount = computed(
-      () => products.value.filter((product) => product.stock < 20).length,
-    );
-
-    const lowStockProducts = computed(() =>
-      products.value.filter((product) => product.stock < 20).sort((a, b) => a.stock - b.stock),
-    );
-
-    /* ==========================
-       재고 상태 갱신
-    ========================== */
-
-    function updateStockStatus(product) {
-      product.status = product.stock < 20 ? "부족" : "정상";
-    }
 
     /* ==========================
        등록
@@ -87,42 +65,6 @@ export const useInventoryStore = defineStore(
     }
 
     /* ==========================
-       재고 증가
-    ========================== */
-
-    function increaseStock(productId, quantity) {
-      const product = findProduct(productId);
-
-      if (!product) return;
-
-      product.stock += Number(quantity);
-
-      updateStockStatus(product);
-    }
-
-    /* ==========================
-       재고 감소
-    ========================== */
-
-    function decreaseStock(productId, quantity) {
-      const product = findProduct(productId);
-
-      if (!product) return false;
-
-      quantity = Number(quantity);
-
-      if (product.stock < quantity) {
-        return false;
-      }
-
-      product.stock -= quantity;
-
-      updateStockStatus(product);
-
-      return true;
-    }
-
-    /* ==========================
        품목 조회
     ========================== */
 
@@ -134,15 +76,10 @@ export const useInventoryStore = defineStore(
       products,
 
       totalProducts,
-      lowStockCount,
-      lowStockProducts,
 
       addProduct,
       updateProduct,
       removeProduct,
-
-      increaseStock,
-      decreaseStock,
 
       findProduct,
     };

@@ -3,87 +3,117 @@ import {
   Package,
   Warehouse,
   Building2,
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  Truck,
-  Globe,
-  BarChart3,
-  Settings,
+  Boxes,
+  ArrowRightLeft,
+  ClipboardList,
+  ShoppingCart,
+  PackagePlus,
+  PackageMinus,
+  History,
 } from "lucide-vue-next";
 
 export const menus = [
   {
-    title: "메인",
+    title: "Dashboard",
+
     items: [
       {
-        name: "대시보드",
-        icon: LayoutDashboard,
+        name: "Dashboard",
         path: "/",
+        icon: LayoutDashboard,
+        roles: ["ADMIN", "PURCHASE", "SALES", "WAREHOUSE"],
       },
     ],
   },
+
   {
-    title: "기준정보",
+    title: "Master",
+
     items: [
       {
         name: "품목관리",
-        icon: Package,
         path: "/inventory",
+        icon: Package,
+        roles: ["ADMIN"],
       },
       {
         name: "거래처관리",
-        icon: Building2,
         path: "/customer",
+        icon: Building2,
+        roles: ["ADMIN"],
       },
       {
         name: "창고관리",
-        icon: Warehouse,
         path: "/warehouse",
+        icon: Warehouse,
+        roles: ["ADMIN"],
       },
     ],
   },
+
   {
-    title: "물류업무",
+    title: "Purchase",
+
+    items: [
+      {
+        name: "발주관리",
+        path: "/purchase-order",
+        icon: ClipboardList,
+        roles: ["ADMIN", "PURCHASE"],
+      },
+    ],
+  },
+
+  {
+    title: "Sales",
+
+    items: [
+      {
+        name: "주문관리",
+        path: "/sales-order",
+        icon: ShoppingCart,
+        roles: ["ADMIN", "SALES"],
+      },
+    ],
+  },
+
+  {
+    title: "Warehouse",
+
     items: [
       {
         name: "입고관리",
-        icon: ArrowDownToLine,
         path: "/inbound",
+        icon: PackagePlus,
+        roles: ["ADMIN", "PURCHASE", "WAREHOUSE"],
       },
+
       {
         name: "출고관리",
-        icon: ArrowUpFromLine,
         path: "/outbound",
+        icon: PackageMinus,
+        roles: ["ADMIN", "SALES", "WAREHOUSE"],
       },
+
       {
-        name: "배송관리",
-        icon: Truck,
-        path: "/shipment",
+        name: "재고관리",
+        path: "/inventory-stock",
+        icon: Boxes,
+        roles: ["ADMIN", "WAREHOUSE"],
       },
-    ],
-  },
-  {
-    title: "국제물류",
-    items: [
+
       {
-        name: "수출입관리",
-        icon: Globe,
-        path: "/trade",
+        name: "재고이동",
+        path: "/transfer",
+        icon: ArrowRightLeft,
+        roles: ["ADMIN", "WAREHOUSE"],
       },
-    ],
-  },
-  {
-    title: "시스템",
-    items: [
+
       {
-        name: "통계",
-        icon: BarChart3,
-        path: "/statistics",
-      },
-      {
-        name: "설정",
-        icon: Settings,
-        path: "/settings",
+        name: "재고이력",
+        path: "/inventory-history",
+        icon: History,
+        roles: ["ADMIN", "WAREHOUSE"],
       },
     ],
   },
