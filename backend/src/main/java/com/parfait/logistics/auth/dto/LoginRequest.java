@@ -1,4 +1,4 @@
-package com.parfait.logistics.user.dto;
+package com.parfait.logistics.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,13 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpRequest {
+public class LoginRequest {
 
     private String email;
-
     private String password;
 
-    private String name;
-
-    private Long companyId;
 }
