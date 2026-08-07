@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://parfait-logistics.vercel.app" target="_blank">
+  <a href="https://parfait-report.co.kr/login" target="_blank">
     🌐 Live Demo
   </a>
 </p>
