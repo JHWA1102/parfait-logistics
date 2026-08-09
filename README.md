@@ -11,6 +11,14 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://app.notion.com/p/Parfait-Logistics-32ed67daca4e807ba260c6d6f98e5786?source=copy_link" target="_blank">
+    📖 Notion
+  </a>
+</p>
+
+
+
 ---
 
 # 📖 Overview
