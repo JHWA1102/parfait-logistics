@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import api from "@/api/axios";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -64,32 +65,33 @@ export const useAuthStore = defineStore(
        Login
     ========================== */
 
-    function login(username, password) {
-      const foundUser = users.find(
-        (item) => item.username === username && item.password === password,
-      );
+    async function login(email, password) {
+      try {
+        const response = await api.post("/api/auth/login", {
+          email,
+          password,
+        });
 
-      if (!foundUser) {
+        const data = response.data;
+
+        token.value = data.accessToken;
+        user.value = data.user;
+
+        console.log(user.value);
+
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        return {
+          success: true,
+          message: "로그인되었습니다.",
+        };
+      } catch (error) {
         return {
           success: false,
-          message: "아이디 또는 비밀번호가 올바르지 않습니다.",
+          message: error.response?.data?.message || "이메일 또는 비밀번호가 올바르지 않습니다.",
         };
       }
-
-      user.value = {
-        id: foundUser.id,
-        username: foundUser.username,
-        name: foundUser.name,
-        role: foundUser.role,
-      };
-
-      // Spring Boot 연결 시 JWT 저장
-      token.value = "mock-token";
-
-      return {
-        success: true,
-        message: "로그인되었습니다.",
-      };
     }
 
     /* ==========================

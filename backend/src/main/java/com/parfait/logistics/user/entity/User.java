@@ -2,6 +2,7 @@ package com.parfait.logistics.user.entity;
 
 import com.parfait.logistics.common.entity.BaseEntity;
 import com.parfait.logistics.company.entity.Company;
+import com.parfait.logistics.role.entity.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,8 +40,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")

@@ -15,6 +15,7 @@ import TransferListView from "@/views/transfer/TransferListView.vue";
 import PurchaseOrderListView from "@/views/purchaseOrder/PurchaseOrderListView.vue";
 import SalesOrderListView from "@/views/salesOrder/SalesOrderListView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
+import SignupView from "@/views/auth/SignupView.vue";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -27,6 +28,12 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginView,
+    },
+    // 회원가입
+    {
+      path: "/signup",
+      name: "signup",
+      component: SignupView,
     },
 
     // ERP
@@ -152,13 +159,16 @@ const router = createRouter({
 router.beforeEach((to) => {
   const authStore = useAuthStore();
 
-  // 로그인 되어있는데 로그인 페이지 접근
-  if (to.name === "login" && authStore.isAuthenticated) {
+  // 로그인하지 않아도 접근할 수 있는 페이지
+  const publicPages = ["login", "signup"];
+
+  // 로그인되어 있는데 로그인/회원가입 페이지 접근
+  if (publicPages.includes(to.name) && authStore.isAuthenticated) {
     return "/";
   }
 
-  // 로그인 안됨
-  if (to.name !== "login" && !authStore.isAuthenticated) {
+  // 로그인하지 않은 사용자가 보호된 페이지 접근
+  if (!publicPages.includes(to.name) && !authStore.isAuthenticated) {
     return "/login";
   }
 

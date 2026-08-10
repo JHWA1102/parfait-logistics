@@ -30,30 +30,44 @@
           <tbody>
             <tr>
               <td>관리자</td>
-              <td>admin</td>
+              <td>admin@example.com</td>
               <td>1234</td>
             </tr>
 
             <tr>
               <td>구매담당</td>
-              <td>purchase</td>
+              <td>purchase@example.com</td>
               <td>1234</td>
             </tr>
 
             <tr>
               <td>영업담당</td>
-              <td>sales</td>
+              <td>sales@example.com</td>
               <td>1234</td>
             </tr>
 
             <tr>
               <td>물류담당</td>
-              <td>warehouse</td>
+              <td>warehouse@example.com</td>
               <td>1234</td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <div class="signup-area">
+        <p>초대받은 사용자만 회원가입할 수 있습니다.</p>
+
+        <BaseButton
+          type="button"
+          color="secondary"
+          block
+          @click="goToSignup"
+        >
+          회원가입
+        </BaseButton>
+      </div>
+
     </div>
   </div>
 </template>
@@ -74,10 +88,13 @@ const username = ref("");
 const password = ref("");
 const errorMessage = ref("");
 
-function handleLogin() {
+async function handleLogin() {
   errorMessage.value = "";
 
-  const result = authStore.login(username.value, password.value);
+  const result = await authStore.login(
+    username.value,
+    password.value
+  );
 
   if (!result.success) {
     errorMessage.value = result.message;
@@ -85,6 +102,10 @@ function handleLogin() {
   }
 
   router.push("/");
+}
+
+function goToSignup() {
+  router.push("/signup");
 }
 </script>
 
@@ -170,5 +191,18 @@ function handleLogin() {
   padding: 8px 0;
 
   border-bottom: 1px solid #f0f0f0;
+}
+
+.signup-area {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.signup-area p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #6b7280;
 }
 </style>
