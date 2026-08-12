@@ -20,6 +20,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
+
+        System.out.println("🔥 LOGIN CONTROLLER 호출");
+        
         return authService.login(request);
     }
 }
