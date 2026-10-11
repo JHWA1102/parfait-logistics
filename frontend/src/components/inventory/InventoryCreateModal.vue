@@ -4,13 +4,17 @@
     :title="props.product ? '품목 수정' : '품목 등록'"
     @update:modelValue="emit('update:modelValue', $event)"
   >
-    <BaseInput v-model="form.code" label="품목 코드" placeholder="예) P001" required />
+    <BaseInput
+      v-model="form.code"
+      label="품목 코드"
+      placeholder="예) P001"
+      :disabled="!!props.product"
+      required
+    />
 
     <BaseInput v-model="form.name" label="품목명" placeholder="품목명을 입력하세요." required />
 
     <BaseInput v-model="form.unit" label="단위" placeholder="EA / BOX" required />
-
-    <BaseInput v-model="form.stock" label="초기 재고" type="number" required />
 
     <template #footer>
       <BaseButton variant="secondary" @click="close"> 취소 </BaseButton>
@@ -49,7 +53,7 @@ const form = reactive({
   code: "",
   name: "",
   unit: "",
-  stock: 0,
+  active: true,
 });
 
 function close() {
@@ -60,30 +64,28 @@ function resetForm() {
   form.code = "";
   form.name = "";
   form.unit = "";
-  form.stock = 0;
+  form.active = true;
 }
 
-function save() {
+async function save() {
   if (!form.code || !form.name || !form.unit) {
     alert("필수 항목을 입력하세요.");
     return;
   }
 
-  if (props.product) {
-    inventoryStore.updateProduct({
-      id: form.id,
-      code: form.code,
-      name: form.name,
-      unit: form.unit,
-      stock: Number(form.stock),
-    });
-  } else {
-    inventoryStore.addProduct({
-      code: form.code,
-      name: form.name,
-      unit: form.unit,
-      stock: Number(form.stock),
-    });
+  try {
+    if (props.product) {
+      await inventoryStore.updateProduct({ ...form });
+    } else {
+      await inventoryStore.addProduct({
+        code: form.code,
+        name: form.name,
+        unit: form.unit,
+      });
+    }
+  } catch (error) {
+    alert(error.response?.data?.message || "품목 저장에 실패했습니다.");
+    return;
   }
 
   resetForm();
@@ -102,7 +104,7 @@ watch(
     form.code = product.code;
     form.name = product.name;
     form.unit = product.unit;
-    form.stock = product.stock;
+    form.active = product.active;
   },
   {
     immediate: true,

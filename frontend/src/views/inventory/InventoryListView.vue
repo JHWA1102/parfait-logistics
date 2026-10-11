@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
 import { useInventoryStore } from "@/stores/inventory";
 
@@ -75,14 +75,27 @@ function openDelete(product) {
   openDeleteModal.value = true;
 }
 
-function deleteProduct() {
+async function deleteProduct() {
   if (!deleteTarget.value) return;
 
-  inventoryStore.removeProduct(deleteTarget.value.id);
+  try {
+    await inventoryStore.removeProduct(deleteTarget.value.id);
+  } catch (error) {
+    alert(error.response?.data?.message || "품목 삭제에 실패했습니다.");
+    return;
+  }
 
   deleteTarget.value = null;
   openDeleteModal.value = false;
 }
+
+onMounted(async () => {
+  try {
+    await inventoryStore.fetchProducts();
+  } catch (error) {
+    alert(error.response?.data?.message || "품목 목록을 불러오지 못했습니다.");
+  }
+});
 
 watch(openCreateModal, (isOpen) => {
   if (!isOpen) {

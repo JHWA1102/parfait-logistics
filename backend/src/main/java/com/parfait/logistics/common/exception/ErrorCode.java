@@ -20,7 +20,11 @@ public enum ErrorCode {
 	COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "회사를 찾을 수 없습니다."),
 	
 	// Warehouse
-	WAREHOUSE_NOT_FOUND(HttpStatus.NOT_FOUND, "창고를 찾을 수 없습니다.");
+	WAREHOUSE_NOT_FOUND(HttpStatus.NOT_FOUND, "창고를 찾을 수 없습니다."),
+
+	// Product
+	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "품목을 찾을 수 없습니다."),
+	PRODUCT_CODE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 품목 코드입니다.");
 
     private final HttpStatus status;
     private final String message;
